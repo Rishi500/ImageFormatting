@@ -9,17 +9,16 @@ import PIL.Image
 from PIL import Image, ImageTk
 from scipy.ndimage import rotate
 from scipy.misc import imread, imshow
-from tkinter import ttk
 
 #Method to create folder at desktop
 def path1():
         global mypath
         global scale
         scale = 90
-        mypath = r'C:\IMAGE_FORMATTING_APP'
+        mypath = r'C:\Resized_Images'
         if not os.path.isdir(mypath):
             os.makedirs(mypath)
-        os.chdir(r'C:\IMAGE_FORMATTING_APP')
+        os.chdir(r'C:\Resized_Images')
 
 def select_img():
     root.filename =  filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
@@ -50,7 +49,7 @@ def resize_func():
             cv.imwrite(img_resize,thumbnail)
             cv.waitKey(0)
             cv.destroyAllWindows()
-            tkinter.messagebox.showinfo('Success','Image Resized and Saved at \n C:\IMAGE_FORMATTING_APP ')
+            tkinter.messagebox.showinfo('Success','Image Resized and Saved at \n C:\Resized_Images\ ')
         else:
             tkinter.messagebox.showinfo('Error','Please write Image Name First')
 
@@ -92,7 +91,7 @@ def pdf_convert():
         if len(str(save_as.get())):
             img_to_pdf = (str(save_as.get()))+ '.pdf'
             PIL.Image.Image.save(im, img_to_pdf, "PDF", resoultion=90.0)
-            tkinter.messagebox.showinfo('Success','PDF saved at \n C:\IMAGE_FORMATTING_APP ')
+            tkinter.messagebox.showinfo('Success','PDF saved at \n C:\Resized_Images\ ')
         else:
             tkinter.messagebox.showinfo('Error','Please write Image Name First')
 
@@ -125,13 +124,13 @@ def face_detect():
             cv.waitKey(4000)
             cv.imwrite(face_img,img)
             cv.destroyAllWindows()
-            tkinter.messagebox.showinfo('Success','Processed Image saved in \n C:\IMAGE_FORMATTING_APP ')
+            tkinter.messagebox.showinfo('Success','Processed Image saved in \n C:\Resized_Images\ ')
         else:
             tkinter.messagebox.showinfo('Error','Please write Image Name First')
     except AttributeError:
         tkinter.messagebox.showinfo('Error','Please select an Image First')
     except :
-        tkinter.messagebox.showinfo('Error','An unexpected Error Occured Run the Program Again')
+        tkinter.messagebox.showinfo('Error','An unexpected Error Occured. Run the Program Again')
 
 
 
@@ -164,7 +163,7 @@ def rotate_180():
             img = Image.open(path)
             img2 = img.rotate(180)
             img2.save(img_rotate_180)
-            tkinter.messagebox.showinfo('Success','Image Rotated by 180 and Saved at \n C:\IMAGE_FORMATTING_APP ')
+            tkinter.messagebox.showinfo('Success','Image Rotated by 180 and Saved at \n C:\Resized_Images\ ')
 
         else:
             tkinter.messagebox.showinfo('Error','Please write Image Name First')
@@ -181,7 +180,7 @@ def rotate_270():
             img = Image.open(path)
             img2 = img.rotate(270)
             img2.save(img_rotate_270)
-            tkinter.messagebox.showinfo('Success','Image Rotated by 270 and Saved at \n C:\IMAGE_FORMATTING_APP ')
+            tkinter.messagebox.showinfo('Success','Image Rotated by 270 and Saved at \n C:\Resized_Images\ ')
 
         else:
             tkinter.messagebox.showinfo('Error','Please write Image Name First')
@@ -192,142 +191,99 @@ def rotate_270():
 #Take a PHOTO
 def take_photo():
     try:
-        if len(str(save_as.get())):
-            cap = cv.VideoCapture(0)
+        cap = cv.VideoCapture(0)
 
-            while(True):
-                ret, frame = cap.read()
-                rgb = cv.cvtColor(frame, cv.COLOR_BGR2BGRA)
+        while(True):
+            ret, frame = cap.read()
+            rgb = cv.cvtColor(frame, cv.COLOR_BGR2BGRA)
 
-                cv.imshow('Press Q to SAVE IMAGE', rgb)
-                if cv.waitKey(1) & 0xFF == ord('q'):
-                    path1()
-
+            cv.imshow('frame', rgb)
+            if cv.waitKey(1) & 0xFF == ord('q'):
+                path1()
+                if len(str(save_as.get())):
                     photo_webcam = (str(save_as.get()))+ '.jpg'
                     out = cv.imwrite(photo_webcam, frame)
                     break
+                else:
+                    tkinter.messagebox.showinfo('Error','Please write Image Name First')
+                break
 
-
-            cap.release()
-            cv.destroyAllWindows()
-            tkinter.messagebox.showinfo('Success','Photo from webcam saved.')
-        else:
-            tkinter.messagebox.showinfo('Error','Please write Image Name First')
-
-
+        cap.release()
+        cv.destroyAllWindows()
+        tkinter.messagebox.showinfo('Success','Photo from webcam saved.')
     except:
         tkinter.messagebox.showinfo('Error','WebCam Might be Absent.')
 
 
 root = Tk()
-root.title("Image Formatting Application - Win 64(Bit)")
-root.configure(bg="#e8f5e9")
-
 
 scale = 90
 
-b1=ttk.Button(root,text="Select Image", width = 15,command=select_img)
-b1.grid(row=0,column=0,padx=4,pady=4)
+b1=tk.Button(root,text="Select Image", width = 15,command=select_img)
+b1.grid(row=0,column=0)
 
 
-l4=Label(root,text="Save file as:",fg='#303F9F',bg='#c8e6c9',font='Calibri 11 bold')
-l4.grid(row=1,column=0,padx=4,pady=0)
-
-break1=Label(root,text="____________________________________________________________________________________________",fg='#303F9F',bg="#e8f5e9",font='Calibri 11 bold')
-break1.grid(row=2,column=0,padx=4,pady=1,columnspan=7)
-
+l4=Label(root,text="Save image as:")
+l4.grid(row=0,column=2)
 
 global e1
 save_as =StringVar()
-e1=Entry(root,textvariable=save_as, width=35)
-e1.grid(row=1,column=2,columnspan=3,padx=4,pady=4)
+e1=Entry(root,textvariable=save_as, width=40)
+e1.grid(row=0,column=3,columnspan=20)
 
 
+l1=Label(root,text="RESIZE IMAGE")
+l1.grid(row=4,column=0)
 
-l1=Label(root,text="RESIZE AN IMAGE",fg='#303F9F',bg='#c8e6c9',font='Calibri 11 bold')
-l1.grid(row=3,column=2,columnspan=3,pady=4,padx=7)
+b2=tk.Button(root,text="+", width = 5,command=increase_scale)
+b2.grid(row=8,column=1)
 
-b2=ttk.Button(root,text="-", width = 15,command=decrease_scale)
-b2.grid(row=4,column=2,padx=4)
+list1=Listbox(root, height=1, width=5)
+list1.grid(row=8,column=2)
+list1.insert(0,"  90")
 
-list1=Listbox(root, height=1, width=5,font='Calibri 11 bold')
-list1.grid(row=4,column=3,padx=4)
+b3=tk.Button(root,text="-", width = 5,command=decrease_scale)
+b3.grid(row=8,column=3)
 
-list1.insert(0,"90")
-
-b3=ttk.Button(root,text="+", width = 15,command=increase_scale)
-b3.grid(row=4,column=4,padx=4)
-
-b4=ttk.Button(root,text="Resize Image", width = 15,command=resize_func)
-b4.grid(row=4,column=5,padx=4,pady=4)
-
-
-
-break2=Label(root,text="____________________________________________________________________________________________",fg='#303F9F',bg="#e8f5e9",font='Calibri 11 bold')
-break2.grid(row=5,column=0,padx=4,pady=1,columnspan=7)
-
+b4=tk.Button(root,text="Resize Image", width = 15,command=resize_func)
+b4.grid(row=4,column=2)
 
 #Image to PDF
-l2=Label(root,text="IMAGE to PDF CONVERTER",fg='#303F9F',bg='#c8e6c9',font='Calibri 11 bold')
-l2.grid(row=6,column=2,columnspan=3,pady=7)
+l2=Label(root,text="IMAGE to PDF CONVERTER")
+l2.grid(row=24,column=0)
 
-b5=ttk.Button(root,text="Image to PDF", width = 15,command=pdf_convert)
-b5.grid(row=7,column=2,columnspan=3)
+b5=tk.Button(root,text="IMAGE TO PDF", width = 15,command=pdf_convert)
+b5.grid(row=28,column=0)
 
+l3=Label(root,text="DETECT FACE FROM IMAGE")
+l3.grid(row=32,column=0)
 
-break3=Label(root,bg="#e8f5e9",text="____________________________________________________________________________________________",fg='#303F9F',font='Calibri 11 bold')
-break3.grid(row=8,column=0,padx=4,pady=1,columnspan=7)
+l6=Label(root,text="TAKE A PHOTO")
+l6.grid(row=32,column=3)
 
+l7=Label(root,text="COMPRESS IMAGE")
+l7.grid(row=24,column=3)
 
-l3=Label(root,text="DETECT FACE FROM IMAGE",fg='#303F9F',bg='#c8e6c9',font='Calibri 11 bold')
-l3.grid(row=9,column=2,columnspan=3,pady=7)
+b6=tk.Button(root,text="DETECT FACE ", width = 15,command=face_detect)
+b6.grid(row=36,column=0)
 
-b6=ttk.Button(root,text="DETECT FACE ", width = 15,command=face_detect)
-b6.grid(row=10,column=2,columnspan=3)
+b6=tk.Button(root,text="COMPRESS IMAGE ", width = 15,command=face_detect)
+b6.grid(row=28,column=3)
 
+l5=Label(root,text="ROTATE IMAGE")
+l5.grid(row=16,column=2)
 
-break4=Label(root,bg="#e8f5e9",text="____________________________________________________________________________________________",fg='#303F9F',font='Calibri 11 bold')
-break4.grid(row=11,column=0,padx=4,pady=1,columnspan=7)
+b7=tk.Button(root,text="ROTATE 90 DEG ", width = 15,command=rotate_90)
+b7.grid(row=16,column=1)
 
+b8=tk.Button(root,text="ROTATE 180 DEG ", width = 15,command=rotate_180)
+b8.grid(row=16,column=3)
 
-l5=Label(root,text="ROTATE AN IMAGE",fg='#303F9F',bg='#c8e6c9',font='Calibri 11 bold')
-l5.grid(row=12,column=2,columnspan=3,pady=7)
+b9=tk.Button(root,text="ROTATE 270 DEG ", width = 15,command=rotate_270)
+b9.grid(row=20,column=2)
 
-b7=ttk.Button(root,text="90 DEG ", width = 15,command=rotate_90)
-b7.grid(row=13,column=2,padx=4,pady=4)
-
-b8=ttk.Button(root,text="180 DEG ", width = 15,command=rotate_180)
-b8.grid(row=13,column=3,padx=4,pady=4)
-
-b9=ttk.Button(root,text="270 DEG ", width = 15,command=rotate_270)
-b9.grid(row=13,column=4,padx=4,pady=4)
-
-
-break5=Label(root,bg="#e8f5e9",text="____________________________________________________________________________________________",fg='#303F9F',font='Calibri 11 bold')
-break5.grid(row=14,column=0,padx=4,pady=1,columnspan=7)
-
-l5=Label(root,text="TAKE A PHOTO FROM WEBCAM",fg='#303F9F',bg='#c8e6c9',font='Calibri 11 bold')
-l5.grid(row=15,column=2,columnspan=3,pady=4)
-
-b10=ttk.Button(root,text="TAKE A PHOTO (Press Q)", width = 30,command=take_photo)
-b10.grid(row=16,column=2,columnspan=3,padx=4,pady=0)
-
-
-break6=Label(root,text="____________________________________________________________________________________________",fg='#303F9F',bg="#e8f5e9",font='Calibri 11 bold')
-break6.grid(row=17,column=0,padx=4,pady=1,columnspan=7)
-
-l6=Label(root,text="NOTE: IMAGES WILL BE SAVED IN C:\IMAGE_FORMATTING_APP",fg='#303F9F',bg='#c8e6c9',font='Calibri 11 bold')
-l6.grid(row=18,column=0,columnspan=7,padx=0)
-
-l7=Label(root,text="------Project Contributed By------",fg='#303F9F',bg='#c8e6c9',font='Calibri 11 bold')
-l7.grid(row=19,column=0,columnspan=7,padx=1)
-
-l8=Label(root,text="Krati Bhandari( github.com/Krati500 )",fg='#303F9F',bg='#c8e6c9',font='Calibri 11 bold')
-l8.grid(row=20,column=0,columnspan=7,padx=2)
-l9=Label(root,text="Rishi Jain( github.com/Rishi500 )",fg='#303F9F',bg='#c8e6c9',font='Calibri 11 bold')
-l9.grid(row=21,column=0,columnspan=7,padx=2)
-break6=Label(root,text="____________________________________________________________________________________________",fg='#303F9F',bg="#e8f5e9",font='Calibri 11 bold')
-break6.grid(row=22,column=0,padx=4,pady=1,columnspan=7)
+b10=tk.Button(root,text="TAKE A PHOTO (Press Q)", width = 30,command=take_photo)
+b10.grid(row=36,column=3)
 
 # Take a Photo From WebCam
 # Image Rotate
