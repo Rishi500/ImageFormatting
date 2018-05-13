@@ -7,8 +7,6 @@ import tkinter.messagebox
 import PIL
 import PIL.Image
 from PIL import Image, ImageTk
-from scipy.ndimage import rotate
-from scipy.misc import imread, imshow
 from tkinter import ttk
 
 #Method to create folder at desktop
