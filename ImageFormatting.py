@@ -8,6 +8,7 @@ import PIL
 import PIL.Image
 from PIL import Image, ImageTk
 from tkinter import ttk
+import math
 
 #Method to create folder at desktop
 def path1():
@@ -169,15 +170,27 @@ def rotate_180():
         path = root.filename
         path1()
         if len(str(save_as.get())):
+            mat = cv.imread(path)
             img_rotate_180 = (str(save_as.get()))+ '.jpg'
-            img = Image.open(path)
-            img2 = img.rotate(180)
-            img2.save(img_rotate_180)
-            tkinter.messagebox.showinfo('Success','Image Rotated by 180 and Saved at \n C:\IMAGE_FORMATTING_APP ')
+            angle = 180
+            height, width = mat.shape[:2]
+            image_center = (width / 2, height / 2)
 
+            rotation_mat = cv.getRotationMatrix2D(image_center, angle, 1)
+            radians = math.radians(angle)
+            sin = math.sin(radians)
+            cos = math.cos(radians)
+            bound_w = int((height * abs(sin)) + (width * abs(cos)))
+            bound_h = int((height * abs(cos)) + (width * abs(sin)))
+            rotation_mat[0, 2] += ((bound_w / 2) - image_center[0])
+            rotation_mat[1, 2] += ((bound_h / 2) - image_center[1])
+            rotated_mat = cv.warpAffine(mat, rotation_mat, (bound_w, bound_h))
+            img2 = rotated_mat
+            cv.imwrite(img_rotate_180,img2)
+            tkinter.messagebox.showinfo('Success','Image Rotated by 180 and Saved at \n C:\IMAGE_FORMATTING_APP ')
         else:
             tkinter.messagebox.showinfo('Error','Please write Image Name First')
-    except AttributeError:
+    except:
         tkinter.messagebox.showinfo('Error','Please select an Image First')
 
 
@@ -186,15 +199,27 @@ def rotate_270():
         path = root.filename
         path1()
         if len(str(save_as.get())):
+            mat = cv.imread(path)
             img_rotate_270 = (str(save_as.get()))+ '.jpg'
-            img = Image.open(path)
-            img2 = img.rotate(270)
-            img2.save(img_rotate_270)
-            tkinter.messagebox.showinfo('Success','Image Rotated by 270 and Saved at \n C:\IMAGE_FORMATTING_APP ')
+            angle = 270
+            height, width = mat.shape[:2]
+            image_center = (width / 2, height / 2)
 
+            rotation_mat = cv.getRotationMatrix2D(image_center, angle, 1)
+            radians = math.radians(angle)
+            sin = math.sin(radians)
+            cos = math.cos(radians)
+            bound_w = int((height * abs(sin)) + (width * abs(cos)))
+            bound_h = int((height * abs(cos)) + (width * abs(sin)))
+            rotation_mat[0, 2] += ((bound_w / 2) - image_center[0])
+            rotation_mat[1, 2] += ((bound_h / 2) - image_center[1])
+            rotated_mat = cv.warpAffine(mat, rotation_mat, (bound_w, bound_h))
+            img2 = rotated_mat
+            cv.imwrite(img_rotate_270,img2)
+            tkinter.messagebox.showinfo('Success','Image Rotated by 270 and Saved at \n C:\IMAGE_FORMATTING_APP ')
         else:
             tkinter.messagebox.showinfo('Error','Please write Image Name First')
-    except AttributeError:
+    except:
         tkinter.messagebox.showinfo('Error','Please select an Image First')
 
 
