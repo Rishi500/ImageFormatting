@@ -11,7 +11,9 @@ from tkinter import ttk
 import math
 import requests
 
-#Method to create folder at desktop
+#Method to create folder in C Drive
+#All the Images will be saved In C:\IMAGE_FORMATTING_APP.
+
 def path1():
         global mypath
         global scale
@@ -21,10 +23,12 @@ def path1():
             os.makedirs(mypath)
         os.chdir(r'C:\IMAGE_FORMATTING_APP')
 
+#Function to select an Image
 def select_img():
     root.filename =  filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
     print (root.filename)
 
+#Resize An Image Function
 def resize_func():
     try:
         path = root.filename
@@ -78,7 +82,8 @@ def decrease_scale():
         y = str(x)
         list1.delete(0)
         list1.insert(0,y)
-
+        
+#Method to Convert Image to PDF
 def pdf_convert():
     try:
         path = root.filename
@@ -100,7 +105,7 @@ def pdf_convert():
         tkinter.messagebox.showinfo('Error','Please select an Image First')
 
 
-#Face Detection Functions
+#Function to Recognize Faces from Images/Pictures.
 
 def face_detect():
     try:
@@ -147,7 +152,7 @@ def face_detect():
 
 
 
-#Rotate Image Functions
+#Rotate Image Functions 90/180/270
 
 def rotate_90():
     try:
@@ -236,7 +241,7 @@ def rotate_270():
         tkinter.messagebox.showinfo('Error','Please select an Image First')
 
 
-#Take a PHOTO
+#Take a PHOTO FROM WEBCAM
 def take_photo():
     try:
         if len(str(save_as.get())):
@@ -359,7 +364,7 @@ l5.grid(row=15,column=2,columnspan=3,pady=4)
 b10=ttk.Button(root,text="TAKE A PHOTO (Press Q)", width = 30,command=take_photo)
 b10.grid(row=16,column=2,columnspan=3,padx=4,pady=0)
 
-
+#Contributors & Notes:
 break6=Label(root,text="____________________________________________________________________________________________",fg='#303F9F',bg="#e8f5e9",font='Calibri 11 bold')
 break6.grid(row=17,column=0,padx=4,pady=1,columnspan=7)
 
@@ -376,7 +381,4 @@ l9.grid(row=21,column=0,columnspan=7,padx=2)
 break6=Label(root,text="____________________________________________________________________________________________",fg='#303F9F',bg="#e8f5e9",font='Calibri 11 bold')
 break6.grid(row=22,column=0,padx=4,pady=1,columnspan=7)
 
-# Take a Photo From WebCam
-# Image Rotate
-# Detect Face from from images
 root.mainloop()
