@@ -109,7 +109,7 @@ def pdf_convert():
 
 def face_detect():
     try:
-
+        path1()
         if not os.path.isdir(r'C:\IMAGE_FORMATTING_APP\haarcascade_frontalface.xml'):
             try:
                 URL = "https://raw.githubusercontent.com/albertz/screenshooting/master/haarcascade_frontalface_alt.xml"
