@@ -9,6 +9,7 @@ import PIL.Image
 from PIL import Image, ImageTk
 from tkinter import ttk
 import math
+import requests
 
 #Method to create folder at desktop
 def path1():
@@ -103,7 +104,18 @@ def pdf_convert():
 
 def face_detect():
     try:
-        face_cascade= cv.CascadeClassifier("haarcascade_frontalface_default.xml")
+
+        if not os.path.isdir(r'C:\IMAGE_FORMATTING_APP\haarcascade_frontalface.xml'):
+            try:
+                URL = "https://raw.githubusercontent.com/albertz/screenshooting/master/haarcascade_frontalface_alt.xml"
+                response = requests.get(URL)
+                with open(r'C:\IMAGE_FORMATTING_APP\haarcascade_frontalface.xml', 'wb') as file:
+                    file.write(response.content)
+            except:
+                tkinter.messagebox.showinfo('Error','Internet Connection Required for Face Detection')
+
+
+        face_cascade= cv.CascadeClassifier(r'C:\IMAGE_FORMATTING_APP\haarcascade_frontalface.xml')
         path = root.filename
         img = cv.imread(path)
         gray_img = cv.cvtColor(img,cv.COLOR_BGR2GRAY)
@@ -113,7 +125,7 @@ def face_detect():
         minNeighbors=5)
 
         for x,y,w,h in faces:
-            img = cv.rectangle(img,(x,y),(x+w,y+h),(100,255,10),3)
+            img = cv.rectangle(img,(x,y),(x+w,y+h),(100,255,0),3)
 
 
         if len(str(save_as.get())):
@@ -144,7 +156,7 @@ def rotate_90():
         if len(str(save_as.get())):
             mat = cv.imread(path)
             img_rotate_90 = (str(save_as.get()))+ '.jpg'
-            angle = 90
+            angle = 270
             height, width = mat.shape[:2]
             image_center = (width / 2, height / 2)
 
@@ -198,10 +210,11 @@ def rotate_270():
     try:
         path = root.filename
         path1()
+
         if len(str(save_as.get())):
             mat = cv.imread(path)
             img_rotate_270 = (str(save_as.get()))+ '.jpg'
-            angle = 270
+            angle = 90
             height, width = mat.shape[:2]
             image_center = (width / 2, height / 2)
 
