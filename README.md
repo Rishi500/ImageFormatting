@@ -1,10 +1,10 @@
 # ImageFormatting
 A Python GUI software for Image Formatting Operations like :
 Image Resize,
-Image Compression,
+Image to PDF Conversion,
 Face Detection from Images,
 Image Rotation,
-Image to PDF Conversion.
+Take a Photograph using WebCam.
 
 Contributors to this Projects:
 1.Krati Bhandari (@ Krati500 Github)
